@@ -1,40 +1,66 @@
 <template>
   <div id="mapContainer">
     <l-map ref="map" @move="log('move')" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
-      <!-- <l-tile-layer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg" layer-type="overlay" name="Stamen Watercolor" -->
-      <!--   attribution="Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>." /> -->
-      <!-- <l-control-layers /> -->
+      <l-tile-layer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg" layer-type="base" name="Stamen Watercolor"
+        attribution="Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>." />
 
       <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
         name="OpenStreetMap"></l-tile-layer>
 
-      <l-tile-layer url="https://s3.amazonaws.com/te512.safecast.org/{z}/{x}/{y}.png"
-        attribution="<a href='https://blog.safecast.org/about/'>SafeCast</a> (<a href='https://creativecommons.org/licenses/by-sa/3.0/'>CC-BY-SA</a>"
-        :min-zoom="5" :max-zoom="25" layer-type="base" name="SafeCast" />
+      <l-geo-json v-for="data in geojsonLayers" :onEachFeature="onEachFeatureJSON" :geojson="data.json" :name="data.name"
+        layer-type="overlay">
+        <l-popup> Esto hay que cambiarlo </l-popup>
+      </l-geo-json>
+
+      <l-control-layers />
     </l-map>
   </div>
 </template>
 
 <script>
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LControlLayers } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LControlLayers, LGeoJson, LPopup } from "@vue-leaflet/vue-leaflet";
 
 export default {
   components: {
     LMap,
     LTileLayer,
-    LControlLayers
+    LControlLayers,
+    LGeoJson,
+    LPopup
   },
   data() {
     return {
       zoom: 14,
-      center: [42.5602081, -2.7601252]
+      center: [42.5602081, -2.7601252],
+      geojsonLayers: []
     };
+  },
+  async created() {
+    const municipios = {
+      url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
+      name: "Municipios La Rioja"
+    };
+    const res = await fetch(municipios.url)
+    const jsonData = await res.json();
+    this.geojsonLayers.push({
+      json: jsonData,
+      name: municipios.name
+    });
   },
   methods: {
     log(a) {
       console.log(a);
     },
+    onEachFeatureJSON(feature, layer) {
+      var popupContent = "<p>I started out as a GeoJSON " +
+        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+      if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
+        popupContent += feature.properties.NOMBRE_MUNICIPIO;
+      }
+      console.log(feature.properties.NOMBRE_MUNICIPIO)
+    }
   }
 };
 </script>
