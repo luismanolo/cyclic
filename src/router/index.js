@@ -39,4 +39,11 @@ const router = createRouter({
   routes,
 })
 
+
+router.beforeEach((to, from) => {
+  // explicitly return false to cancel the navigation
+  console.log(`Nos vamos de ${from.name} a ${to.name}`);
+  return true
+})
+
 export default router
