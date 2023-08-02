@@ -7,8 +7,7 @@
       <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
         name="OpenStreetMap"></l-tile-layer>
 
-      <l-geo-json v-for="data in geojsonLayers" :filter="filterFeatureJSON(data.feature)" :onEachFeature="onEachFeatureJSON" :geojson="data.json" :name="data.name"
-        layer-type="overlay">
+      <l-geo-json v-for="data in geojsonLayers" :options="data.options" :geojson="data.json" :name="data.name" layer-type="overlay">
       </l-geo-json>
 
       <l-control-layers />
@@ -35,6 +34,8 @@ export default {
       geojsonLayers: []
     };
   },
+  computed: {
+  },
   async created() {
     const municipios = {
       url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
@@ -44,24 +45,33 @@ export default {
     const jsonData = await res.json();
     this.geojsonLayers.push({
       json: jsonData,
-      name: municipios.name
+      name: municipios.name,
+      options: {
+        onEachFeature: this.onEachFeatureJSON,
+        mouseover: this.mouseOverJSON
+      }
     });
   },
   methods: {
     log(a) {
       console.log(a);
     },
-    filterFeatureJSON(feature) {
+    filterFeatureJSON() {
       return true;
+    },
+    mouseOverJSON(feature) {
+      feature.openTooltip();
     },
     onEachFeatureJSON(feature, layer) {
       console.log("Municipio");
       console.log(feature.properties.NOMBRE_MUNICIPIO);
-      if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
-        layer.bindPopup(feature.properties.NOMBRE_MUNICIPIO);
-        layer.on('mouseover', () => { layer.openPopup(); });
-        layer.on('mouseout', () => { layer.closePopup(); });
-      }
+      layer.bindPopup(`${feature.properties.NOMBRE_MUNICIPIO} (${feature.properties.NOMBRE_PROVINCIA})`)
+      layer.bindTooltip(`${feature.properties.NOMBRE_MUNICIPIO}`, {sticky: true})
+      // if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
+      //   layer.bindPopup(feature.properties.NOMBRE_MUNICIPIO);
+      //   layer.on('mouseover', () => { layer.openPopup(); });
+      //   layer.on('mouseout', () => { layer.closePopup(); });
+      // }
     }
   }
 };
