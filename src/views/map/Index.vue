@@ -7,9 +7,8 @@
       <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
         name="OpenStreetMap"></l-tile-layer>
 
-      <l-geo-json v-for="data in geojsonLayers" :onEachFeature="onEachFeatureJSON" :geojson="data.json" :name="data.name"
+      <l-geo-json v-for="data in geojsonLayers" :filter="filterFeatureJSON(data.feature)" :onEachFeature="onEachFeatureJSON" :geojson="data.json" :name="data.name"
         layer-type="overlay">
-        <l-popup> Esto hay que cambiarlo </l-popup>
       </l-geo-json>
 
       <l-control-layers />
@@ -52,14 +51,17 @@ export default {
     log(a) {
       console.log(a);
     },
+    filterFeatureJSON(feature) {
+      return true;
+    },
     onEachFeatureJSON(feature, layer) {
-      var popupContent = "<p>I started out as a GeoJSON " +
-        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-
+      console.log("Municipio");
+      console.log(feature.properties.NOMBRE_MUNICIPIO);
       if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
-        popupContent += feature.properties.NOMBRE_MUNICIPIO;
+        layer.bindPopup(feature.properties.NOMBRE_MUNICIPIO);
+        layer.on('mouseover', () => { layer.openPopup(); });
+        layer.on('mouseout', () => { layer.closePopup(); });
       }
-      console.log(feature.properties.NOMBRE_MUNICIPIO)
     }
   }
 };
