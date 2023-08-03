@@ -18,8 +18,8 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LControlLayers, LGeoJson, LPopup } from "@vue-leaflet/vue-leaflet";
-// import { mapStore } from '@/store/mapStore'
-// const mapData = mapStore();
+import { mapStore } from '@store/mapStore.js'
+const mapData = mapStore();
 
 export default {
   components: {
@@ -39,12 +39,11 @@ export default {
   computed: {
   },
   async created() {
-    const municipios = {
-      url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
-      name: "Municipios La Rioja"
-    };
-    // console.dir(mapData)
-    // const municipios = mapData.json[0];
+    // const municipios = {
+    //   url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
+    //   name: "Municipios La Rioja"
+    // };
+    const municipios = mapData.jsonLayers[0];
     const res = await fetch(municipios.url)
     const jsonData = await res.json();
     this.geojsonLayers.push({
