@@ -10,6 +10,8 @@ const PORT = 3000;
 //
 app.use('/', express.static(path.join(__dirname, 'dist')))
 
+app.use('/site', express.static(path.join(__dirname, 'dist')))
+
 
 app.listen(PORT, () =>
   console.log(`Server listening on port: ${PORT}`),
