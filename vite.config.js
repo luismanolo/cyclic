@@ -9,6 +9,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '',
   plugins: [
     vue({
       template: { transformAssetUrls }
@@ -36,14 +37,14 @@ export default defineConfig({
       '.vue',
     ],
   },
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        site: resolve(__dirname, 'index.html'),
-      },
-    },
-  },
+  // build: {
+  //   rollupOptions: {
+  //     input: {
+  //       main: resolve(__dirname, 'index.html'),
+  //       site: resolve(__dirname, 'index.html'),
+  //     },
+  //   },
+  // },
   server: {
     port: 3000,
   },
