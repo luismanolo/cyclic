@@ -9,8 +9,17 @@ const PORT = 3000;
 // });
 //
 app.use('/', express.static(path.join(__dirname, 'dist')))
-
 app.use('/site', express.static(path.join(__dirname, 'dist')))
+
+// app.use('/site/', function(req, res, next) {
+//   res.sendFile(path.join(__dirname, 'dist/index.html'))
+//   next();
+// })
+
+// app.get('/site', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+// });
+// app.use('/site/assets', express.static(path.join(__dirname, 'dist', 'assets')))
 
 
 app.listen(PORT, () =>

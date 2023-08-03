@@ -1,6 +1,7 @@
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { resolve } from 'path'
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -34,6 +35,14 @@ export default defineConfig({
       '.tsx',
       '.vue',
     ],
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        site: resolve(__dirname, 'index.html'),
+      },
+    },
   },
   server: {
     port: 3000,
