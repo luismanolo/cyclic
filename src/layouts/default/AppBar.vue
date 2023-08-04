@@ -1,5 +1,6 @@
 <template>
   <v-app-bar flat>
+    <v-app-bar-nav-icon @click="switchDrawer"></v-app-bar-nav-icon>
     <v-app-bar-title>
       <v-icon icon="mdi-circle-slice-6" />
       Vuetify Static con LeafletMap
@@ -18,5 +19,8 @@
 </template>
 
 <script setup>
-  //
+  const switchDrawer = () => {
+    // this.$store.dispatch("ui/switchDrawer");
+    console.log("switchDrawer pulsado");
+  }
 </script>
