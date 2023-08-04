@@ -13,9 +13,9 @@ const PORT = 3000;
     res.sendFile('/dist/index.html');
   });
 
-  app.use('/', (req, res) => {
-    res.send("Ir a la ruta /app")
-  }))
+  // app.use('/', (req, res) => {
+  //   res.send("Ir a la ruta /app")
+  // }))
   app.listen(PORT, () =>
     console.log(`Server listening on port: ${PORT}`),
   );
