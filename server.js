@@ -6,6 +6,7 @@ const PORT = 3000;
 
 (async function() {
 
+  // No funciona
   // app.use('/app/static', express.static(path.join(__dirname, 'dist/assets')));
   // app.use('/app', express.static(path.join(__dirname, 'dist')));
   // app.get('/app/', function(req, res) {
