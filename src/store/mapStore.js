@@ -7,6 +7,13 @@ export const mapStore = defineStore('mapStore', {
         url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
         name: "Municipios La Rioja"
       }
+    ],
+    baseLayers: [
+      {
+        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution: "",
+        name: "OpenStreetMap"
+      }
     ]
   }),
   getters: {

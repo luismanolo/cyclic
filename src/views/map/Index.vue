@@ -1,13 +1,14 @@
 <template>
   <div id="mapContainer">
-    <l-map ref="map" @move="log('move')" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
-      <l-tile-layer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg" layer-type="base" name="Stamen Watercolor"
-        attribution="Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>." />
+    <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
 
-      <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
-        name="OpenStreetMap"></l-tile-layer>
+      <!-- BaseLayers -->
+      <l-tile-layer v-for="layer in baseMapLayers" :url="layer.url" layer-type="base"
+        :name="layer.name"></l-tile-layer>
 
-      <l-geo-json v-for="data in geojsonLayers" :options="data.options" :geojson="data.json" :name="data.name" layer-type="overlay">
+      <!-- GeoJSONLayers -->
+      <l-geo-json v-for="data in geojsonLayers" :options="data.options" :geojson="data.json" :name="data.name"
+        layer-type="overlay">
       </l-geo-json>
 
       <l-control-layers />
@@ -15,70 +16,70 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia'
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LControlLayers, LGeoJson, LPopup } from "@vue-leaflet/vue-leaflet";
-// import { mapStore } from '@/store/mapStore'
-// const mapData = mapStore();
+import { mapStore } from '@/store/mapStore'
 
-export default {
-  components: {
-    LMap,
-    LTileLayer,
-    LControlLayers,
-    LGeoJson,
-    LPopup
-  },
-  data() {
-    return {
-      zoom: 14,
-      center: [42.5602081, -2.7601252],
-      geojsonLayers: []
-    };
-  },
-  computed: {
-  },
-  async created() {
-    const municipios = {
-      url: "https://raw.githubusercontent.com/iderioja/base_datos_geografica/master/municipios.json",
-      name: "Municipios La Rioja"
-    };
-    // console.dir(mapData)
-    // const municipios = mapData.json[0];
-    const res = await fetch(municipios.url)
+const mapData = mapStore();
+const { jsonLayers, baseLayers } = storeToRefs(mapData);
+
+const zoom = ref(12);
+const center = ref([42.5602081, -2.7601252]);
+const geojsonLayers = ref([]);
+const baseMapLayers = ref([]);
+
+onMounted(async () => {
+  // Cargamos todas las capas base
+  for (const layer of baseLayers.value) {
+    baseMapLayers.value.push(layer);
+  }
+  // Cargamos las capas json
+  for (const layer of jsonLayers.value) {
+    const res = await fetch(layer.url)
     const jsonData = await res.json();
-    this.geojsonLayers.push({
+    geojsonLayers.value.push({
       json: jsonData,
-      name: municipios.name,
+      name: layer.name,
       options: {
-        onEachFeature: this.onEachFeatureJSON,
-        mouseover: this.mouseOverJSON
+        onEachFeature: onEachFeatureJSON,
+        style: {
+          "color": "#ff7800",
+          "weight": 5,
+          "opacity": 0.65
+        }
       }
     });
-  },
-  methods: {
-    log(a) {
-      console.log(a);
-    },
-    filterFeatureJSON() {
-      return true;
-    },
-    mouseOverJSON(feature) {
-      feature.openTooltip();
-    },
-    onEachFeatureJSON(feature, layer) {
-      console.log("Municipio");
-      console.log(feature.properties.NOMBRE_MUNICIPIO);
-      layer.bindPopup(`${feature.properties.NOMBRE_MUNICIPIO} (${feature.properties.NOMBRE_PROVINCIA})`)
-      layer.bindTooltip(`${feature.properties.NOMBRE_MUNICIPIO}`, {sticky: true})
-      // if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
-      //   layer.bindPopup(feature.properties.NOMBRE_MUNICIPIO);
-      //   layer.on('mouseover', () => { layer.openPopup(); });
-      //   layer.on('mouseout', () => { layer.closePopup(); });
-      // }
-    }
   }
-};
+});
+const onEachFeatureJSON = (feature, layer) => {
+  const defaultStyle = {
+    "color": "#ff7800",
+    "weight": 5,
+    "opacity": 0.65
+  }
+  layer.setStyle(defaultStyle);
+  if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
+    layer.bindPopup(`${feature.properties.NOMBRE_MUNICIPIO} (${feature.properties.NOMBRE_PROVINCIA})`)
+    layer.bindTooltip(`${feature.properties.NOMBRE_MUNICIPIO}`, { sticky: true })
+  }
+  layer.on('mouseout', () => {
+    layer.setStyle(defaultStyle);
+  })
+  layer.on('mouseover', () => {
+    layer.bringToFront();
+    layer.setStyle({
+      color: 'red'
+    });
+  })
+  // if (feature.properties && feature.properties.NOMBRE_MUNICIPIO) {
+  //   layer.bindPopup(feature.properties.NOMBRE_MUNICIPIO);
+  //   layer.on('mouseover', () => { layer.openPopup(); });
+  //   layer.on('mouseout', () => { layer.closePopup(); });
+  // }
+}
 </script>
 
 <style>
