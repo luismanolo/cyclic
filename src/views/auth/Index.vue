@@ -7,15 +7,20 @@
             <h1>Entrar</h1>
             <p class="text-medium-emphasis">Introduce tus datos parar empezar.</p>
 
-            <VForm class="mt-7" @submit.prevent="login">
+            <!-- <VForm class="mt-7" @submit.prevent="login"> -->
+            <VForm class="mt-7">
               <div class="mt-1">
                 <label class="label text-grey-darken-2" for="credentials.email">Email</label>
-                <VTextField :rules="[ruleRequired, ruleEmail]" v-model="credentials.email"
+                <!-- <VTextField :rules="[ruleRequired, ruleEmail]" v-model="credentials.email" -->
+                <!--   prepend-inner-icon="fluent:mail-24-regular" id="email" name="email" type="email" /> -->
+                <VTextField v-model="credentials.email"
                   prepend-inner-icon="fluent:mail-24-regular" id="email" name="email" type="email" />
               </div>
               <div class="mt-1">
                 <label class="label text-grey-darken-2" for="credentials.password">Contraseña</label>
-                <VTextField :rules="[ruleRequired, rulePassLen]" v-model="credentials.password"
+                <!-- <VTextField :rules="[ruleRequired, rulePassLen]" v-model="credentials.password" -->
+                <!--   prepend-inner-icon="fluent:password-20-regular" id="password" name="password" type="password" /> -->
+                <VTextField v-model="credentials.password"
                   prepend-inner-icon="fluent:password-20-regular" id="password" name="password" type="password" />
               </div>
               <div class="mt-5">
@@ -23,11 +28,13 @@
               </div>
             </VForm>
             <p class="text-body-2 mt-10">
-              <NuxtLink to="/reset-password" class="font-weight-bold text-primary">¿Contraseña perdida?</NuxtLink>
+              <!-- <v-btn to="/reset-password" class="font-weight-bold text-primary">¿Contraseña perdida?</v-btn> -->
+              <v-btn class="font-weight-bold text-primary">¿Contraseña perdida?</v-btn>
             </p>
             <p class="text-body-2 mt-4">
               <span>¿No tienes cuenta?
-                <NuxtLink to="/signup" class="font-weight-bold text-primary">Crear cuenta</NuxtLink>
+                <!-- <v-btn to="/signup" class="font-weight-bold text-primary">Crear cuenta</v-btn> -->
+                <v-btn class="font-weight-bold text-primary">Crear cuenta</v-btn>
               </span>
             </p>
           </VCol>

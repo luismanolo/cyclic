@@ -11,7 +11,7 @@
         layer-type="overlay">
       </l-geo-json>
 
-      <l-control-layers />
+      <l-control-layers :options="controlOptions" />
     </l-map>
   </div>
 </template>
@@ -30,6 +30,10 @@ const zoom = ref(12);
 const center = ref([42.5602081, -2.7601252]);
 const geojsonLayers = ref([]);
 const baseMapLayers = ref([]);
+
+const controlOptions = {
+  position: "bottomleft"
+}
 
 onMounted(async () => {
   // Cargamos todas las capas base

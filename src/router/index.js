@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/map',
-    component: () => import('@/layouts/default/Default.vue'),
+    component: () => import('@/layouts/map/Default.vue'),
     children: [
       {
         path: '',
