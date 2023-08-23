@@ -12,9 +12,9 @@
     <v-btn icon to="/">
       <v-icon>mdi-home</v-icon>
     </v-btn>
-    <v-btn icon to="/auth">
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
+    <!-- <v-btn icon to="/auth"> -->
+    <!--   <v-icon>mdi-account</v-icon> -->
+    <!-- </v-btn> -->
   </v-app-bar>
 </template>
 
