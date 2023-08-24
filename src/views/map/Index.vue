@@ -32,10 +32,11 @@ const geojsonLayers = ref([]);
 const baseMapLayers = ref([]);
 
 const controlOptions = {
-  position: "bottomleft"
+  // position: "bottomleft"
 }
 
 onMounted(async () => {
+  console.log(`onMounted: ${window.Telegram.WebApp}`);
   // Cargamos todas las capas base
   for (const layer of baseLayers.value) {
     baseMapLayers.value.push(layer);
