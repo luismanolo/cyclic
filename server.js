@@ -6,9 +6,12 @@ const PORT = 3000;
 
 (async function() {
 
+  // Enrutado de la aplicación en /app
+  // Hay que cambiar en router el siguiente parámetro
+  // history: createWebHistory('/app/'),
   app.use('/app/static', express.static(path.join(__dirname, 'dist/assets')));
   app.use('/app', express.static(path.join(__dirname, 'dist')));
-  app.get('/app/', function(req, res) {
+  app.get('/app/', function(_, res) {
     res.sendFile('/dist/index.html');
   });
 
