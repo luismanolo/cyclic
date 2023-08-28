@@ -3,6 +3,7 @@
     <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
 
       <!-- BaseLayers -->
+      <l-wms-tile-layer url="http://www.ign.es/wms-inspire/pnoa-ma" name="IGN" :layers="wmslayers" layer-type="base"></l-wms-tile-layer>
       <l-tile-layer v-for="layer in baseMapLayers" :url="layer.url" layer-type="base"
         :name="layer.name"></l-tile-layer>
 
@@ -20,7 +21,7 @@
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia'
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LControlLayers, LGeoJson, LPopup } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LControlLayers, LGeoJson, LWmsTileLayer} from "@vue-leaflet/vue-leaflet";
 import { mapStore } from '@/store/mapStore'
 
 const mapData = mapStore();
@@ -34,6 +35,10 @@ const baseMapLayers = ref([]);
 const controlOptions = {
   // position: "bottomleft"
 }
+
+// const wmslayers = ref("OI.OrthoimageCoverage,OI.MosaicElement,fondo");
+// const wmslayers = ref("fondo");
+const wmslayers = ref("OI.OrthoimageCoverage");
 
 onMounted(async () => {
   console.log(`onMounted: ${window.Telegram.WebApp}`);
