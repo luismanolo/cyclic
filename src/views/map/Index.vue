@@ -3,7 +3,7 @@
     <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
 
       <!-- BaseLayers -->
-      <l-wms-tile-layer url="http://www.ign.es/wms-inspire/pnoa-ma" name="IGN" :layers="wmslayers" layer-type="base"></l-wms-tile-layer>
+      <l-wms-tile-layer url="https://www.ign.es/wms-inspire/pnoa-ma" name="IGN" :layers="wmslayers" layer-type="base"></l-wms-tile-layer>
       <l-tile-layer v-for="layer in baseMapLayers" :url="layer.url" layer-type="base"
         :name="layer.name"></l-tile-layer>
 
