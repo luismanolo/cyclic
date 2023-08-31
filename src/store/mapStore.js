@@ -14,6 +14,29 @@ export const mapStore = defineStore('mapStore', {
         attribution: "",
         name: "OpenStreetMap"
       }
+    ],
+    wmsLayers: [
+      {
+        url: "https://www.ign.es/wms-inspire/pnoa-ma",
+        layers: "OI.OrthoimageCoverage",
+        name: "IGN Orto",
+        transparent: false,
+        type: "base"
+      },
+      {
+        url: "https://www.ign.es/wms-inspire/mapa-raster",
+        layers: "mtn_rasterizado",
+        name: "IGN Raster",
+        transparent: false,
+        type: "base"
+      },
+      {
+        url: "https://www.cartociudad.es/wms-inspire/direcciones-ccpp",
+        layers: "codigo-postal",
+        name: "Cod Postal",
+        transparent: true,
+        type: "base"
+      }
     ]
   }),
   getters: {

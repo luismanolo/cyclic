@@ -2,8 +2,9 @@
   <div id="mapContainer">
     <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
 
-      <!-- BaseLayers -->
-      <l-wms-tile-layer url="https://www.ign.es/wms-inspire/pnoa-ma" name="IGN" :layers="wmslayers" layer-type="base"></l-wms-tile-layer>
+      <!-- WmsLayers -->
+      <l-wms-tile-layer v-for="layer in wmsLayers" :url="layer.url" :transparent="layer.transparent" :name="layer.name" :layers="layer.layers" :layer-type="layer.type"></l-wms-tile-layer>
+
       <l-tile-layer v-for="layer in baseMapLayers" :url="layer.url" layer-type="base"
         :name="layer.name"></l-tile-layer>
 
@@ -25,7 +26,7 @@ import { LMap, LTileLayer, LControlLayers, LGeoJson, LWmsTileLayer} from "@vue-l
 import { mapStore } from '@/store/mapStore'
 
 const mapData = mapStore();
-const { jsonLayers, baseLayers } = storeToRefs(mapData);
+const { jsonLayers, baseLayers, wmsLayers } = storeToRefs(mapData);
 
 const zoom = ref(12);
 const center = ref([42.5602081, -2.7601252]);
@@ -38,7 +39,8 @@ const controlOptions = {
 
 // const wmslayers = ref("OI.OrthoimageCoverage,OI.MosaicElement,fondo");
 // const wmslayers = ref("fondo");
-const wmslayers = ref("OI.OrthoimageCoverage");
+// https://www.ign.es/wms-inspire/mapa-raster
+// const wmslayers = ref("OI.OrthoimageCoverage");
 
 onMounted(async () => {
   console.log(`onMounted: ${window.Telegram.WebApp}`);
